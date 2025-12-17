@@ -59,67 +59,34 @@ CoinsOld = [
 ]
 
 Coins = [
-    [0, 1, 11],
-    [0, 1, 2],
-    [0, 1, 16],
+    [0, 3, 5],
+    [2, 4, 1],
+    [7, 1, 6],
 ]
 
-N = len(Coins)
-M = len(Coins[0])
-
-# Матрица для хранения пути (откуда пришли)
-path = [[(0, 0)] * M for _ in range(N)]
-path[0][0] = (-1, -1)  # Начальная точка
-
-# Ваш алгоритм с записью пути
-for i in range(N):
-    for j in range(M):
+for i in range(len(Coins)):
+    for j in range(len(Coins[i])):
         if i == 0 and j == 0:
+            Coins[i][j] = [Coins[i][j], ["(0,0)"]]
             continue
-        elif i == 0 and j != 0:
-            Coins[i][j] = Coins[i][j] + Coins[i][j - 1]
-            path[i][j] = (i, j - 1)  # пришли слева
-        elif i != 0 and j == 0:
-            Coins[i][j] = Coins[i][j] + Coins[i - 1][j]
-            path[i][j] = (i - 1, j)  # пришли сверху
+        elif i == 0:
+            znachenie = Coins[i][j] + Coins[i][j - 1][0]
+            marshrut = Coins[i][j - 1][1] + [f"→Вправо ({i},{j})"]
+            Coins[i][j] = [znachenie, marshrut]
+        elif j == 0:
+            znachenie = Coins[i][j] + Coins[i - 1][j][0]
+            marshrut = Coins[i - 1][j][1] + [f"Влево ({i},{j})"]
+            Coins[i][j] = [znachenie, marshrut]
         else:
-            if Coins[i - 1][j] > Coins[i][j - 1]:
-                Coins[i][j] = Coins[i - 1][j] + Coins[i][j]
-                path[i][j] = (i - 1, j)  # пришли сверху
+            if Coins[i-1][j][0] >= Coins[i][j-1][0]:
+                znachenie = Coins[i][j] + Coins[i - 1][j][0]
+                marshrut = Coins[i - 1][j][1] + [f"Вниз({i},{j})"]
+                Coins[i][j] = [znachenie, marshrut]
             else:
-                Coins[i][j] = Coins[i][j - 1] + Coins[i][j]
-                path[i][j] = (i, j - 1)  # пришли слева
+                znachenie = Coins[i][j] + Coins[i][j - 1][0]
+                marshrut = Coins[i][j - 1][1] + [f"Вправо({i},{j})"]
+                Coins[i][j] = [znachenie, marshrut]
 
-max_coins = Coins[-1][-1]
-print(f"Максимальное количество монет: {max_coins}")
-
-# Восстанавливаем путь
-path_coords = []
-i, j = N - 1, M - 1
-
-while (i, j) != (-1, -1):
-    path_coords.append((i, j))
-    i, j = path[i][j]
-
-# Переворачиваем путь
-path_coords.reverse()
-
-# Выводим путь с указанием направления
-print("Путь черепахи:")
-for idx in range(1, len(path_coords)):
-    prev_i, prev_j = path_coords[idx - 1]
-    curr_i, curr_j = path_coords[idx]
-
-    # Определяем откуда пришли
-    if curr_i == prev_i + 1 and curr_j == prev_j:
-        direction = "сверху"
-    elif curr_i == prev_i and curr_j == prev_j + 1:
-        direction = "слева"
-    else:
-        direction = "начало"
-
-    print(f"  Из {direction} → ({curr_i}, {curr_j})")
-
-
-
-
+itog = Coins[-1][-1]
+print(f"Максимальное количество монет: {itog[0]}")
+print(f"Путь: {' '.join(itog[1])}")
