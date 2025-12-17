@@ -60,8 +60,8 @@ CoinsOld = [
 
 Coins = [
     [0, 3, 5],
-    [2, 4, 1],
-    [7, 1, 6],
+    [2, 4, 0],
+    [7, 1, 9],
 ]
 
 for i in range(len(Coins)):
