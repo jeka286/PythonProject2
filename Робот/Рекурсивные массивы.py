@@ -72,11 +72,14 @@ def solve(maze, row=None, col=None, path=None):
     if maze[row][col] == 'x':
         return [path] if path else [[]]
 
-    orig = maze[row][col]  # сохраняю оригинальное значение клетки
     maze[row] = maze[row][:col] + '#' + maze[row][col + 1:]  # помечаю клетку как посещённую
 
     all_paths = []
-    directions = [(-1, 0, 'Up'), (1, 0, 'Down'), (0, -1, 'Left'), (0, 1, 'Right')]
+    directions = \
+        [(-1, 0, 'Up'),
+         (1, 0, 'Down'),
+         (0, -1, 'Left'),
+         (0, 1, 'Right')]
 
     for x, y, direction in directions:
         new_row, new_col = row + x, col + y
